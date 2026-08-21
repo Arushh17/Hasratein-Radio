@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hasratein Radio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body style="background:#111;color:white;text-align:center;font-family:Arial;padding-top:100px;">
+
+<h1>🎵 Hasratein Radio</h1>
+
+<h2>📻 Now Playing</h2>
+
+<p id="songName">🎵 Now Playing: MAJHIMAULI.mp3</p>
+
+<p>🟢 Radio Status : ONLINE</p>
+<audio id="player" controls>
+<source src="/music/Deva%20Shree%20Ganesha%20-%20Full%20Song.mp4" type="audio/mp4">
+    Your browser does not support the audio element.
+</audio>
+<p id="timeDisplay">0:00 / 0:00</p>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

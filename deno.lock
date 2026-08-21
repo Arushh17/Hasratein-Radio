@@ -1,0 +1,29 @@
+{
+  "version": "5",
+  "specifiers": {
+    "jsr:@deno/installer-shell-setup@*": "0.3.4"
+  },
+  "jsr": {
+    "@deno/installer-shell-setup@0.3.4": {
+      "integrity": "48665d1a737d487cce6874bc97bba70a5aeffa7053aca3f60df93c6fab8963b4"
+    }
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@distube/ytdl-core@^4.16.12",
+        "npm:@vookav2/play-dl@^1.9.9",
+        "npm:dotenv@^17.4.2",
+        "npm:express@^5.2.1",
+        "npm:imvu.js@0.1",
+        "npm:nodemon@^3.1.14",
+        "npm:play-dl@^1.9.7",
+        "npm:socket.io-client@^4.8.3",
+        "npm:socket.io@^4.8.3",
+        "npm:sqlite3@^6.0.1",
+        "npm:yt-search@^2.13.1",
+        "npm:ytdl-core@^4.11.5"
+      ]
+    }
+  }
+}

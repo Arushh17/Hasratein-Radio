@@ -1,0 +1,21 @@
+body {
+    background: #0b1220;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 80px;
+}
+
+h1 {
+    color: #4da3ff;
+    font-size: 42px;
+}
+
+p {
+    font-size: 22px;
+}
+
+audio {
+    margin-top: 20px;
+    width: 400px;
+}
