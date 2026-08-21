@@ -124,8 +124,11 @@ app.get("/stream", async (req, res) => {
             "--remote-components",
             "ejs:github",
 
+            "--cookies-from-browser",
+            "chrome",
+
             "-f",
-            "bestaudio",
+            "18",
 
             "-o",
             "-",
