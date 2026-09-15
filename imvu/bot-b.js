@@ -18,6 +18,7 @@ const { Client } = require('../imvu-next-tool/packages/client/dist/cjs/index.js'
 const { createIMQManager } = require('../imvu-next-tool/packages/imq/dist/cjs/index.js');
 const { handleCommand } = require('../bot/bot');
 const failover = require('./failover');
+const { createComeHandler } = require('./come');
 
 const { IMVU_BOTB_USERNAME, IMVU_BOTB_PASSWORD, IMVU_ROOM_ID, IMVU_BOTB_VERIFICATION_CODE } = process.env;
 
@@ -115,12 +116,35 @@ async function start() {
 
     function sendReply(text) {
         const chatId = imqQueue.replace('/chat/', '');
-        manager.sendMessage(imqQueue, imqMount, { chatId, message: text, to: 0, userId: String(cid) });
+        // Same base64/JSON envelope fix as Bot A's sendReply (imvu/bot.js) —
+        // the wire protocol expects `message` to already be a base64-encoded
+        // JSON string, not a raw object.
+        const envelope = JSON.stringify({ chatId, message: text, to: 0, userId: String(cid) });
+        const encoded = Buffer.from(envelope).toString('base64');
+        manager.sendMessage(imqQueue, imqMount, encoded);
     }
+
+    // !come — shared with Bot A (imvu/bot.js) via imvu/come.js so an A/B
+    // failover never silently disables the command. See that file for the
+    // full verified-protocol mechanism and owner-only permission behavior.
+    const { runCome } = createComeHandler({
+        client,
+        cid,
+        roomId: IMVU_ROOM_ID,
+        sendReply,
+        logPrefix: '[Bot B][Come]',
+    });
 
     function onRoomMessage(msg) {
         const text = (msg.message && msg.message.message) ? msg.message.message.trim() : '';
         if (!text.startsWith('!')) return;
+
+        if (text.toLowerCase() === '!come') {
+            console.log(`🚪 [Bot B][Come] Requested by ${msg.user_id}`);
+            runCome(msg).catch((err) => console.error('❌ [Bot B] Come error:', err.message));
+            return; // isolated — does not touch the shared radio command handler
+        }
+
         console.log(`💬 [Bot B] IMVU command from ${msg.user_id}: ${text}`);
         handleCommand(text, sendReply, IMVU_ROOM_ID).catch((err) => console.error('❌ [Bot B] handleCommand error:', err));
     }
